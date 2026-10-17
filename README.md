@@ -1,58 +1,214 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛠️ Technician Toolkit
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, high-performance platform for home appliance and HVAC (AC, Refrigerator, Washing Machine, Microwave, etc.) technicians. Built with **Laravel 13**, **FilamentPHP v3**, and **MySQL**, utilizing **Singleton Design Patterns** and a clean service architecture.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Key Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Error Code Finder (795+ Fault Codes)**: Searchable fault database with causes, step-by-step troubleshooting, and downloadable technical PDFs.
+* **Appliance & Brand Master**: Organized across 7 core appliances and 298 equipment brands.
+* **Gas Charging & Pressure Charts (11 Refrigerants)**: Standing, suction, and discharge pressure specifications.
+* **Compressor Directory (80+ Compressors)**: Model specifications, HP capacity, and wiring diagrams.
+* **Spare Parts & Product Catalog (68+ Products)**: Categories, sub-categories, pricing, and purchase links.
+* **Video Tutorials & Courses**: Training course modules and video lessons for skill growth.
+* **Technical Articles**: Service blogs and troubleshooting guides.
+* **Modern Filament v3 Admin Panel**: Fast, responsive management dashboard with real-time statistics.
+* **Dual API Support**: Modern RESTful API v1 with Laravel Sanctum tokens + legacy compatible routes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 💻 Tech Stack & Requirements
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* **PHP**: `>= 8.2` (PHP 8.3 recommended)
+* **Framework**: Laravel 13.x
+* **Database**: MySQL 8.0+ / 9.x
+* **Admin Dashboard**: FilamentPHP v3
+* **API Auth**: Laravel Sanctum
+* **Composer**: `>= 2.0`
+* **Node.js & NPM**: `>= 18.0`
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🚀 Step-by-Step Setup Guide
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone & Navigate to Project
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <repository-url> technician_toolkit
+cd technician_toolkit
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install PHP Dependencies
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Environment Configuration
 
-## Code of Conduct
+Copy the example environment file:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+Generate the application encryption key:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan key:generate
+```
 
-## License
+### 4. Configure Database Credentials
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Open `.env` and set your MySQL database connection:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=technician_toolkit
+DB_USERNAME=root
+DB_PASSWORD=your_mysql_password
+```
+
+> **Note**: Make sure the database exists in MySQL before running migrations:
+> ```sql
+> CREATE DATABASE IF NOT EXISTS technician_toolkit CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+> ```
+
+---
+
+### 5. Run Migrations & Seed Default Data
+
+Run the database migrations and seed the super admin user along with default application settings:
+
+```bash
+php artisan migrate --seed
+```
+
+This will automatically create:
+* All relational tables (`appliances`, `brands`, `error_codes`, `compressors`, `refrigerants`, `products`, `courses`, `articles`, `banners`, `app_settings`, etc.)
+* **Super Admin User**:
+  * **Email**: `admin@gmail.com`
+  * **Password**: `nasruddin@#321@#`
+  * **Role**: `admin`
+
+---
+
+### 6. (Optional) Import Legacy Live Data
+
+If you want to populate your local MySQL database with all live data from the existing system (795 error codes, 298 brands, 80 compressors, 68 products, 11 refrigerants, etc.):
+
+```bash
+php artisan toolkit:import-live
+```
+
+---
+
+### 7. Link Public Storage
+
+Create the symbolic link from `public/storage` to `storage/app/public` for file uploads:
+
+```bash
+php artisan storage:link
+```
+
+---
+
+### 8. Start the Local Server
+
+```bash
+php artisan serve
+```
+
+The application is now accessible at:
+* **Landing Page**: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+* **Filament Admin Panel**: [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+
+---
+
+## 🔐 Admin Panel Access
+
+1. Open your browser and navigate to: **`http://127.0.0.1:8000/admin`**
+2. Log in with your admin credentials:
+   * **Email**: `admin@gmail.com`
+   * **Password**: `nasruddin@#321@#`
+
+Features inside the Admin Panel:
+* Real-time Overview Dashboard with stats
+* Appliances & Brands Manager
+* Error Codes CRUD with PDF upload and multi-filters
+* Compressor & Refrigerant specs management
+* Product catalog and categories
+* Course and video playlist management
+* Article CMS with rich-text editor
+* Banner management
+
+---
+
+## 📡 REST API Reference
+
+All modern API endpoints are available under the `/api/v1` prefix:
+
+### Authentication
+* `POST /api/v1/auth/login` - Obtain Sanctum bearer token
+* `GET  /api/v1/auth/me` - Authenticated user profile *(Requires Bearer Token)*
+* `POST /api/v1/auth/logout` - Revoke current token *(Requires Bearer Token)*
+
+### Content & Reference
+* `GET /api/v1/appliances` - List all appliances
+* `GET /api/v1/brands` - List brands (supports `?appliance_id=`)
+* `GET /api/v1/error-codes` - Search error codes (supports `?search=E1&appliance_id=&brand_id=`)
+* `GET /api/v1/refrigerants` - Refrigerant pressure & specifications
+* `GET /api/v1/compressors` - Compressor catalog & specs
+* `GET /api/v1/products` - Spares & equipment catalog (supports `?trending=1&category_id=`)
+* `GET /api/v1/courses` - Training courses & video tutorials
+* `GET /api/v1/articles` - Technical service guides
+* `GET /api/v1/banners` - Active promotional banners
+* `GET /api/v1/settings` - Global configurations & WhatsApp support contacts
+
+### Legacy Mobile App Aliases (Backwards Compatible)
+* `POST /api/login-admin`
+* `GET  /api/get-all-appliance-error-code-list`
+* `GET  /api/get-all-brand-name-error-code-list`
+* `GET  /api/get-all-error-codes-list`
+* `GET  /api/get-all-compressor`
+* `GET  /api/get-all-refrigerant`
+* `GET  /api/get-all-products`
+* `GET  /api/get-all-course-list`
+* `GET  /api/get-all-articals`
+* `GET  /api/get-all-banner`
+
+---
+
+## 🏗️ Architecture & Design Patterns
+
+* **Singleton Pattern**:
+  * `AppSettingsService`: In-memory cached settings and configuration manager.
+  * `MediaStorageService`: Unified asset storage abstraction (Local / S3 / Cloudflare R2).
+  * `ErrorCodeSearchService`: Optimized multi-criteria error code search provider.
+* **Service-Repository Pattern**: Clean separation between HTTP presentation layer, business services, and Eloquent data models.
+
+---
+
+## 🧪 Testing & Code Quality
+
+Run the PHPUnit test suite:
+
+```bash
+php artisan test
+```
+
+Format code according to Laravel coding standards using Pint:
+
+```bash
+vendor/bin/pint --format agent
+```
+
+---
+
+## 👤 Credits
+
+* **Author**: Faizan Khan
+* **Copyright**: © 2026 Technician Toolkit
